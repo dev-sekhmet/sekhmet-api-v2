@@ -1,0 +1,8 @@
+
+amazon:
+  aws:
+    region:
+  dynamo:
+    table-name-prefix: ${application.env}
+application:
+  env:
