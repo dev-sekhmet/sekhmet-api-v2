@@ -3,6 +3,7 @@ import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
 import com.sekhmet.api.sekhmetapi.domain.User;
@@ -11,6 +12,7 @@ import com.sekhmet.api.sekhmetapi.service.dto.sms.CheckPhoneVerificationRequest;
 import com.sekhmet.api.sekhmetapi.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -39,6 +41,12 @@ public class UserServiceTestIT {
     @Autowired
     private UserRepository userRepository;
 
+    private static String tableNamePrefix;
+
+    @Value("${amazon.dynamodb.table-name-prefix}")
+    public void setTableNamePrefix(String tableNamePrefix){
+        UserServiceTestIT.tableNamePrefix = tableNamePrefix;
+    }
     @DynamicPropertySource
     static void registerPgProperties(DynamicPropertyRegistry registry) {
         registry.add("amazon.dynamodb.endpoint", () -> localStack.getEndpointOverride(DYNAMODB).toString());
@@ -53,7 +61,10 @@ public class UserServiceTestIT {
         var dynamoDBMapper = new DynamoDBMapper(amazonDynamoDB);
 
         // Create table
-        var tableRequest = dynamoDBMapper.generateCreateTableRequest(User.class);
+        DynamoDBMapperConfig.Builder builder = new
+                DynamoDBMapperConfig.Builder();
+        builder.setTableNameOverride(DynamoDBMapperConfig.TableNameOverride.withTableNamePrefix("dev"));
+        var tableRequest = dynamoDBMapper.generateCreateTableRequest(User.class, builder.build());
         tableRequest.setProvisionedThroughput(new ProvisionedThroughput(5L, 5L));
         amazonDynamoDB.createTable(tableRequest);
     }
@@ -67,12 +78,12 @@ public class UserServiceTestIT {
     @Test
     public void testRegisterUserByPhoneNumber() {
         // Given
-        CheckPhoneVerificationRequest request = new CheckPhoneVerificationRequest("1234567890", "238765", "fr", "fr");
-        User expectedUser = new User();
+        var request = new CheckPhoneVerificationRequest("1234567890", "238765", "fr", "fr");
+        var expectedUser = new User();
         expectedUser.setPhoneNumber(request.getPhoneNumber());
 
         // When
-        User result = userService.registerUserByPhoneNumber(request);
+        var result = userService.registerUserByPhoneNumber(request);
         result.setId(null);
 
         // Then
@@ -84,7 +95,7 @@ public class UserServiceTestIT {
     @Test
     public void testGetUserByPhoneNumber() {
         // Given
-        String phoneNumber = "1234567890";
+        String phoneNumber = "1234567891";
         User expectedUser = new User();
         expectedUser.setId(UUID.randomUUID());
         expectedUser.setPhoneNumber(phoneNumber);
