@@ -34,6 +34,12 @@ public class UserAuthResource {
     private final ConversationService conversationService;
     private final UserService userService;
 
+    /**
+     *
+     * @param request the phone verification request
+     * @return the status
+     * @throws BadRequestAlertException errors
+     */
     @GetMapping("/authenticate")
     public ResponseEntity<VerificationStatus> authenticate(@Valid StartPhoneVerificationRequest request) throws BadRequestAlertException {
         // for GOOGLE and APPLE verification
@@ -56,13 +62,13 @@ public class UserAuthResource {
      * Login or signup via phone number
      *
      * @param request : verification token, phone number, langKey and token request
-     * @return
+     * @return JWTToken the token created
      */
     @GetMapping("/verify")
     public ResponseEntity<JWTToken> verify(CheckPhoneVerificationRequest request) throws BadRequestAlertException {
         // for GOOGLE and APPLE verification
         if (request.getPhoneNumber().startsWith("+23799999") && request.getToken().startsWith("9999")) {
-            return generateJwtTokenAndBuildResponseEntity(request);
+            return generateJwtTokenAndOrCreateUser(request);
         }
 
         var status = verificationService.checkVerificationCode(request);
@@ -80,7 +86,7 @@ public class UserAuthResource {
             );
         }
 
-        return generateJwtTokenAndBuildResponseEntity(request);
+        return generateJwtTokenAndOrCreateUser(request);
     }
 
     /**
@@ -91,10 +97,10 @@ public class UserAuthResource {
     @GetMapping("/refresh-twilio-token")
     public ResponseEntity<JWTToken> refreshTwilioToken(CheckPhoneVerificationRequest request) {
         log.info("Refresh twilio token request: {}", request);
-        return generateJwtTokenAndBuildResponseEntity(request);
+        return generateJwtTokenAndOrCreateUser(request);
     }
 
-    private ResponseEntity<JWTToken> generateJwtTokenAndBuildResponseEntity(CheckPhoneVerificationRequest request) {
+    private ResponseEntity<JWTToken> generateJwtTokenAndOrCreateUser(CheckPhoneVerificationRequest request) {
         var userOptional = userService.getUserByPhoneNumber(request.getPhoneNumber());
         var user = userOptional.orElseGet(() -> userService.registerUserByPhoneNumber(request));
 

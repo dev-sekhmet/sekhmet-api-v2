@@ -1,12 +1,12 @@
 
 amazon:
   aws:
-    region:
+    region: eu-west-3
   dynamodb:
-    endpoint:
+    endpoint: http://localhost:4566/
     table-name-prefix: ${application.env}
 application:
-  env:
+  env: dev
   s3:
     region: 'eu-west-3'
     endpoint: 'http://localhost:4566'
