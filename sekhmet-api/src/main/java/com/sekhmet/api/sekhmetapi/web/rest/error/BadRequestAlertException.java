@@ -1,13 +1,14 @@
 package com.sekhmet.api.sekhmetapi.web.rest.error;
 
-import java.io.Serial;
+import org.zalando.problem.AbstractThrowableProblem;
+import org.zalando.problem.Status;
+
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BadRequestAlertException extends Exception{
+public class BadRequestAlertException extends AbstractThrowableProblem {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     private final String entityName;
@@ -15,14 +16,13 @@ public class BadRequestAlertException extends Exception{
     private final String errorKey;
 
     public BadRequestAlertException(String defaultMessage, String entityName, String errorKey) {
-      this.entityName = entityName;
-      this.errorKey = errorKey;
-
+        this(ErrorConstants.DEFAULT_TYPE, defaultMessage, entityName, errorKey);
     }
 
     public BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
-        this(defaultMessage, entityName, errorKey);
-
+        super(type, defaultMessage, Status.BAD_REQUEST, null, null, null, getAlertParameters(entityName, errorKey));
+        this.entityName = entityName;
+        this.errorKey = errorKey;
     }
 
     public String getEntityName() {

@@ -13,7 +13,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 @Setter
 public class ApplicationProperties {
-
+    public final static String SPRING_PROFILE_DEVELOPMENT = "dev";
+    /** Constant <code>SPRING_PROFILE_TEST="test"</code> */
+    public final static String SPRING_PROFILE_TEST = "test";
+    /** Constant <code>SPRING_PROFILE_PRODUCTION="prod"</code> */
+    public final static String SPRING_PROFILE_PRODUCTION = "prod";
     private final S3Properties s3 = new S3Properties();
     private final TwilioProperties twilio = new TwilioProperties();
     private String env;
