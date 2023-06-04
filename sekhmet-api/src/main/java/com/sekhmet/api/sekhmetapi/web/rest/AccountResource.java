@@ -55,7 +55,7 @@ public class AccountResource {
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService
-                .getUserWithAuthorities()
+                .getCurrentUser()
                 .map(UserDTO::new)
                 .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
@@ -65,8 +65,8 @@ public class AccountResource {
      *
      * @param userDTO the current user information.
      */
-    @PostMapping("/account")
-    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
+    @PatchMapping("/account")
+    public Optional<User> saveAccount(@Valid @RequestBody UserDTO userDTO) {
         String userid = SecurityUtils
                 .getCurrentUserLogin()
                 .orElseThrow(() -> new AccountResourceException("Current user login not found"));
@@ -74,56 +74,13 @@ public class AccountResource {
         if (user.isEmpty()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(
+        return userService.updateUser(
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getEmail(),
                 userDTO.getLangKey(),
                 userDTO.getImageUrl()
         );
-    }
-
-    /**
-     * {@code POST  /account/user-picture} : add user profil picture.
-     *
-     * @param file the current user information.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
-     */
-    @PostMapping("/" + ACCOUNT_USER_PROFIL_PICTURE)
-    public UserDTO addUserProfil(@RequestParam MultipartFile file) {
-        String userLogin = SecurityUtils
-                .getCurrentUserLogin()
-                .orElseThrow(() -> new AccountResource.AccountResourceException("Current user login not found"));
-        Optional<User> user = userService.addProfilePicture(userLogin, file);
-        return user.map(UserDTO::new).orElseThrow(() -> new AccountResourceException("User could not be found"));
-    }
-
-    /**
-     * {@code GET  /messages/:messageId/:fileType/:fileId} : get the file.
-     *
-     * @param fileId the id of the message media to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the message, or with status {@code 404 (Not Found)}.
-     */
-    @GetMapping("/" + ACCOUNT_USER_PROFIL_PICTURE + "/{userId}/{fileId}")
-    public ResponseEntity<byte[]> getProfilPicture(@PathVariable String fileId, @PathVariable String userId) throws IOException {
-        log.debug("REST request to get Media : {} - {}", userId, fileId);
-
-        S3Object media = userService.getProfiPic(userId, fileId);
-        try (InputStream in = media.getObjectContent()) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            IOUtils.copy(in, baos);
-            byte[] fileBytes = baos.toByteArray();
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.parseMediaTypes(media.getObjectMetadata().getContentType()).get(0));
-            headers.setContentLength(fileBytes.length);
-            return wrapOrNotFound(Optional.of(fileBytes), headers);
-        }
-    }
-
-    static <X> ResponseEntity<X> wrapOrNotFound(Optional<X> maybeResponse, HttpHeaders header) {
-        return maybeResponse.map(response -> ResponseEntity.ok().headers(header).body(response))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
 }

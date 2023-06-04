@@ -7,11 +7,9 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperConfig;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverterFactory;
 import com.sekhmet.api.sekhmetapi.repository.UserRepository;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Configuration
 @EnableDynamoDBRepositories(dynamoDBMapperConfigRef = "dynamoDBMapperConfig", basePackageClasses = UserRepository.class)
@@ -25,9 +23,6 @@ public class DynamoDBConfig {
 
     @Value("${amazon.dynamodb.table-name-prefix}")
     private String tableNamePrefix;
-
-    @Autowired
-    private Environment environment;
 
     @Bean
     public DynamoDBMapperConfig dynamoDBMapperConfig() {

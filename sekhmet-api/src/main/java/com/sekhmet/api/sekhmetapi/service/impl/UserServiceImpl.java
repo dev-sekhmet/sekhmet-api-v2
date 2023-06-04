@@ -1,6 +1,5 @@
 package com.sekhmet.api.sekhmetapi.service.impl;
 
-import com.amazonaws.services.s3.model.S3Object;
 import com.sekhmet.api.sekhmetapi.domain.User;
 import com.sekhmet.api.sekhmetapi.repository.UserRepository;
 import com.sekhmet.api.sekhmetapi.security.SecurityUtils;
@@ -9,7 +8,6 @@ import com.sekhmet.api.sekhmetapi.service.dto.sms.CheckPhoneVerificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -34,16 +32,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserWithAuthorities() {
+    public Optional<User> getCurrentUser() {
         return SecurityUtils.getCurrentUserLogin().flatMap(id -> userRepository.findById(UUID.fromString(id)));
     }
 
     @Override
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils
+    public Optional<User> updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+        return SecurityUtils
                 .getCurrentUserLogin()
                 .flatMap(id -> userRepository.findById(UUID.fromString(id)))
-                .ifPresent(user -> {
+                .map(user -> {
                             user.setFirstName(firstName);
                             user.setLastName(lastName);
                             if (email != null) {
@@ -52,6 +50,7 @@ public class UserServiceImpl implements UserService {
                             user.setLangKey(langKey);
                             user.setImageUrl(imageUrl);
                             log.debug("Changed Information for User: {}", user);
+                            return userRepository.save(user);
                         }
                 );
     }
@@ -61,13 +60,4 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id);
     }
 
-    @Override
-    public Optional<User> addProfilePicture(String userLogin, MultipartFile file) {
-        return Optional.empty();
-    }
-
-    @Override
-    public S3Object getProfiPic(String userId, String fileId) {
-        return null;
-    }
 }

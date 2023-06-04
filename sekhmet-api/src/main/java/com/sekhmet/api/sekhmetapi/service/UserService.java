@@ -1,21 +1,36 @@
 package com.sekhmet.api.sekhmetapi.service;
 
-import com.amazonaws.services.s3.model.S3Object;
 import com.sekhmet.api.sekhmetapi.domain.User;
 import com.sekhmet.api.sekhmetapi.service.dto.sms.CheckPhoneVerificationRequest;
-import com.sekhmet.api.sekhmetapi.service.dto.sms.VerificationStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
 
+    /**
+     * Get the user by phone number
+     *
+     * @param phoneNumber the phone number
+     * @return the user or empty
+     */
     Optional<User> getUserByPhoneNumber(String phoneNumber);
 
+    /**
+     * Register a user by phone number
+     *
+     * @param request the request
+     * @return the user
+     */
     User registerUserByPhoneNumber(CheckPhoneVerificationRequest request);
 
-    Optional<User> getUserWithAuthorities();
+    /**
+     * Get the current user
+     *
+     * @return the current user or empty
+     */
+    Optional<User> getCurrentUser();
+
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
@@ -25,11 +40,14 @@ public interface UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl);
+    Optional<User> updateUser(String firstName, String lastName, String email, String langKey, String imageUrl);
 
+    /**
+     * get the user bu uuid
+     *
+     * @param uuid id of the user
+     * @return the user or empty
+     */
     Optional<User> findById(UUID uuid);
 
-    Optional<User> addProfilePicture(String userLogin, MultipartFile file);
-
-    S3Object getProfiPic(String userId, String fileId);
 }
