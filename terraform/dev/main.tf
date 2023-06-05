@@ -19,18 +19,22 @@ module "asg" {
   target_group_arn = module.alb.target_group_arn
   scale_out_cpu    = var.scale_out_cpu
   scale_in_cpu     = var.scale_in_cpu
-  ami_id           = var.custom_ami_id
-  user_data_script = var.user_data_script
+  ami_id           = var.ami_id
+  user_data = var.user_data
+  codeartefact_domain_name = var.codeartefact_domain_name
+  codeartefact_domain_owner = var.codeartefact_domain_owner
+  instance_profile = var.instance_profile
+  instance_type = var.instance_type
+  route53_cname_name = var.route53_cname_name
+  route53_zone_id = var.route53_zone_id
 }
 
 # Create DynamoDB table
 module "dynamodb" {
   source               = "./modules/dynamodb"
-  table_name_prefix    = var.table_name_prefix
-  capacity_mode        = var.dynamodb_capacity_mode
-  read_capacity_units  = var.dynamodb_read_capacity_units
-  write_capacity_units = var.dynamodb_write_capacity_units
-  environment          = "Dev"
+  dynamodb_capacity_mode        = var.dynamodb_capacity_mode
+  dynamodb_read_capacity_units  = var.dynamodb_read_capacity_units
+  dynamodb_write_capacity_units = var.dynamodb_write_capacity_units
 }
 
 # Route53 CNAME record

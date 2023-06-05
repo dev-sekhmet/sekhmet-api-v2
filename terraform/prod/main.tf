@@ -19,8 +19,8 @@ module "asg" {
   target_group_arn = module.alb.target_group_arn
   scale_out_cpu    = var.scale_out_cpu
   scale_in_cpu     = var.scale_in_cpu
-  ami_id           = var.custom_ami_id
-  user_data_script = var.user_data_script
+  ami_id           = var.ami_id
+  user_data_script = var.user_data
 }
 
 # Create DynamoDB table
