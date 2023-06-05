@@ -10,16 +10,29 @@
 	</parent>
 	<groupId>com.sekhmet.api</groupId>
 	<artifactId>sekhmet-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>sekhmet-api</name>
-	<description>All Sekmet  Api</description>
+	<description>All Sekmet Api</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>sekhmet-backends</id>
+			<name>sekhmet-backends</name>
+			<url>https://sekhmet-backends-922347170544.d.codeartifact.eu-west-3.amazonaws.com/maven/sekhmet-backends/
+			</url>
+		</repository>
+	</distributionManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

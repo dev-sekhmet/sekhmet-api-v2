@@ -1,0 +1,87 @@
+Constructtion de l'image Spring boot Sekhmet
+
+1 Installer Java-17
+sudo yum update -y
+sudo yum install java-17-amazon-corretto
+
+
+2 Installer Maven
+cd /opt
+sudo wget https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz
+sudo tar xzf apache-maven-3.9.2-bin.tar.gz
+sudo ln -s apache-maven-3.9.2 apache-maven
+sudo sh -c 'echo "M2_HOME=/opt/apache-maven" >> /etc/environment'
+sudo sh -c 'echo "PATH=\$PATH:/opt/apache-maven/bin" >> /etc/environment'
+source /etc/environment
+
+# tester
+mvn --version
+
+3 Configurer le settings.xml
+Rajouter le endpoint de repo codeArtefact et creer token codeArtefact
+aws codeartifact get-authorization-token --domain sekhmet-backends --domain-owner 922347170544 --region eu-west-3 --query authorizationToken --output text
+
+utiliser le dans le settings.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.2.0 http://maven.apache.org/xsd/settings-1.2.>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <servers>
+        <server>
+     <id>sekhmet-backends</id>
+     <username>aws</username>
+     <password>{token}</password>
+    </server>
+  </servers>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <repositories>
+                <repository>
+                    <id>sekhmet-backends</id>
+                    <url>https://sekhmet-backends-922347170544.d.codeartifact.eu-west-3.amazonaws.com/maven/se>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <activeProfiles>
+        <activeProfile>default</activeProfile>
+    </activeProfiles>
+
+</settings>
+
+telecharger un jar pour tester 
+
+Creer le service Spring boot
+sudo nano /etc/systemd/system/app.service
+
+a l'interieur
+[Unit]
+Description=Spring Boot Application
+
+[Service]
+User=ec2-user
+# The configuration file application.properties should be here:
+WorkingDirectory=/home/ec2-user/spring-boot-home
+# path to the executable jar
+ExecStart=/usr/bin/java -jar app.jar
+# Specify environment file
+EnvironmentFile=/home/ec2-user/spring-boot-home/env.conf
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+
+
+sudo systemctl daemon-reload
+sudo systemctl enable app.service
+
+
+ ln -sf /home/ec2-user/.m2/repository/com/sekhmet/api/sekhmet-api/0.0.2-SNAPSHOT/sekhmet-api-0.0.2-SNAPSHOT.jar /home/ec2-user/spring-boot-home/app.jar
+
+log du service
+sudo journalctl -u app.service

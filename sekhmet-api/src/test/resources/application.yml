@@ -7,6 +7,12 @@ amazon:
   dynamodb:
     endpoint: http://localhost:4566/
     table-name-prefix: ${application.env}
+management:
+  endpoints:
+    enabled-by-default: false
+  endpoint:
+    info:
+      enabled: true
 application:
   env: dev
   s3:

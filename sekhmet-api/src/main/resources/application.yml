@@ -7,6 +7,33 @@ amazon:
   dynamodb:
     endpoint:
     table-name-prefix: ${application.env}
+management:
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+    java:
+      enabled: true
+    defaults:
+      enabled: true
+    git:
+      enabled: true
+      mode: simple
+    os:
+      enabled: true
+info:
+  application:
+    name: ${spring.application.name}
+    description: Sekhmet Api
+    version: '@project.version@'
+    build-time: '@timestamp@'
+    spring-boot-version: '@project.parent.version@'
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
+
 application:
   env:
   s3:
