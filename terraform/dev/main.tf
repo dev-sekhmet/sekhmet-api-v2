@@ -6,6 +6,7 @@ module "alb" {
   target_port     = var.target_port
   listener_port   = var.listener_port
   security_groups = var.alb_security_groups
+  subnets         = var.subnets
 }
 
 # Create Auto Scaling Group
@@ -27,6 +28,7 @@ module "asg" {
   instance_type = var.instance_type
   route53_cname_name = var.route53_cname_name
   route53_zone_id = var.route53_zone_id
+  subnets = var.subnets
 }
 
 # Create DynamoDB table
@@ -38,10 +40,10 @@ module "dynamodb" {
 }
 
 # Route53 CNAME record
-resource "aws_route53_record" "cname" {
+/*resource "aws_route53_record" "cname" {
   zone_id = var.route53_zone_id
   name    = var.route53_cname_name
   type    = "CNAME"
   ttl     = 300
   records = [module.alb.alb_dns_name] # Update with prod ALB DNS name
-}
+}*/

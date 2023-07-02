@@ -117,7 +117,7 @@ variable "listener_port" {
 variable "target_group_name" {
   description = "The name of the ALB target group"
   type        = string
-  default     = "my-target-group"
+  default     = "Sekhmet-api-Prod-ALB-TargetGroup"
 }
 
 variable "region" {
