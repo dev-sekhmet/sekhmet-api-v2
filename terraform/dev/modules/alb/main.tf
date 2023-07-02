@@ -1,5 +1,5 @@
 resource "aws_security_group" "alb_sg" {
-  name        = "my-alb-security-group"
+  name        = "Sekhmet-alb-Dev-security-group"
   description = "Security group for ALB"
 
   ingress {
@@ -17,7 +17,7 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "sekhmet-alb-security-group"
+    Name = "Sekhmet-alb-Dev-security-group"
   }
 }
 

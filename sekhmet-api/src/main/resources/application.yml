@@ -22,17 +22,16 @@ management:
       mode: simple
     os:
       enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "health,info"
 info:
   application:
     name: ${spring.application.name}
     description: Sekhmet Api
     version: '@project.version@'
     build-time: '@timestamp@'
-    spring-boot-version: '@project.parent.version@'
-  endpoints:
-    web:
-      exposure:
-        include: "health,info"
 
 application:
   env:

@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Get the CodeArtifact authorization token
 AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain sekhmet-backends --domain-owner ${var.domain_owner} --region eu-west-3 --query authorizationToken --output text)
