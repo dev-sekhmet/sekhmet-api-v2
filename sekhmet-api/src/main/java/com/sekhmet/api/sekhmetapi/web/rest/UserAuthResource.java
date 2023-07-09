@@ -101,10 +101,12 @@ public class UserAuthResource {
     }
 
     private ResponseEntity<JWTToken> generateJwtTokenAndOrCreateUser(CheckPhoneVerificationRequest request) {
+        log.debug("Find or create user by phone number: {}", request.getPhoneNumber());
         var userOptional = userService.getUserByPhoneNumber(request.getPhoneNumber());
         var user = userOptional.orElseGet(() -> userService.registerUserByPhoneNumber(request));
 
         HttpHeaders httpHeaders = new HttpHeaders();
+        log.info("Generate JWT token request: {}", request);
         String twilioToken = conversationService.generateAccessToken(user.getId());
         httpHeaders.add(AUTHORIZATION_HEADER, "Bearer " + twilioToken);
         return new ResponseEntity<>(new JWTToken(twilioToken), httpHeaders, HttpStatus.OK);

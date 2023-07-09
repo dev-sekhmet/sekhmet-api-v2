@@ -179,6 +179,10 @@ variable "dynamodb_endpoint" {
   default = "dynamodb.eu-west-3.amazonaws.com"
 }
 
+variable "aws_region" {
+  type    = string
+}
+
 variable "twilio_conversation_sid" {
   type    = string
 }

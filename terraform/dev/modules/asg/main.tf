@@ -43,6 +43,7 @@ data "template_file" "userdata" {
     twilio_auth_token = var.twilio_auth_token
     twilio_verify_sid = var.twilio_verify_sid
     dynamodb_endpoint = var.dynamodb_endpoint
+    aws_region = var.aws_region
     twilio_conversation_sid = var.twilio_conversation_sid
   }
 }

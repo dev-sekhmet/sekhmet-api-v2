@@ -131,7 +131,6 @@ variable "codeartefact_domain_name" {
 # application variables
 variable "application_version" {
   type    = string
-  default = "0.0.2-SNAPSHOT"
 }
 
 variable "application_env" {
@@ -156,6 +155,9 @@ variable "twilio_verify_sid" {
 }
 
 variable "dynamodb_endpoint" {
+  type    = string
+}
+variable "aws_region" {
   type    = string
 }
 

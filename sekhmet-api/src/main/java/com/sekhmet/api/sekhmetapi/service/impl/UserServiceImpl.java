@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getCurrentUser() {
+        log.debug("Request to get current user");
         return SecurityUtils.getCurrentUserLogin().flatMap(id -> userRepository.findById(UUID.fromString(id)));
     }
 

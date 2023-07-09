@@ -38,6 +38,7 @@ module "asg" {
   twilio_api_secret = var.twilio_api_secret
   twilio_verify_sid = var.twilio_verify_sid
   dynamodb_endpoint = var.dynamodb_endpoint
+  aws_region = var.aws_region
 }
 
 # Create DynamoDB table

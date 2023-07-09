@@ -42,6 +42,7 @@ APPLICATION_TWILIO_API_SECRET=${twilio_api_secret}
 APPLICATION_TWILIO_AUTH_TOKEN=${twilio_auth_token}
 APPLICATION_TWILIO_VERIFY_SID=${twilio_verify_sid}
 AMAZON_DYNAMODB_ENDPOINT=${dynamodb_endpoint}
+AMAZON_AWS_REGION=${aws_region}
 APPLICATION_TWILIO_CONVERSATION_SID=${twilio_conversation_sid}
 EOF
 

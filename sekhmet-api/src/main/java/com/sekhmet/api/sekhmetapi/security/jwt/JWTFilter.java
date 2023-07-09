@@ -18,7 +18,6 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String TWILIO_AUTHORIZATION_HEADER = "Twilio_Authorization";
 
     public static final String AUTHORIZATION_TOKEN = "access_token";
 
