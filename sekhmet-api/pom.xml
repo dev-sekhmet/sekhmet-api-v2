@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.sekhmet.api</groupId>
 	<artifactId>sekhmet-api</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>sekhmet-api</name>
 	<description>All Sekmet Api</description>
 	<properties>

@@ -7,6 +7,7 @@ module "alb" {
   listener_port   = var.listener_port
   security_groups = var.alb_security_groups
   subnets         = var.subnets
+  target_group_name = var.target_group_name
 }
 
 # Create Auto Scaling Group
@@ -29,6 +30,14 @@ module "asg" {
   route53_cname_name = var.route53_cname_name
   route53_zone_id = var.route53_zone_id
   subnets = var.subnets
+  key_name = var.key_name
+  application_version = var.application_version
+  twilio_conversation_sid = var.twilio_conversation_sid
+  twilio_account_sid = var.twilio_account_sid
+  twilio_auth_token = var.twilio_auth_token
+  twilio_api_secret = var.twilio_api_secret
+  twilio_verify_sid = var.twilio_verify_sid
+  dynamodb_endpoint = var.dynamodb_endpoint
 }
 
 # Create DynamoDB table

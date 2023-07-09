@@ -10,6 +10,14 @@ resource "aws_security_group" "launch-template-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 22  # SSH port
+    to_port     = 22  # SSH port
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -22,13 +30,31 @@ resource "aws_security_group" "launch-template-sg" {
   }
 }
 
+data "template_file" "userdata" {
+  template = file("${path.cwd}/../user-data/user-data.sh.tpl")
+
+  vars = {
+    codeartefact_domain_owner = var.codeartefact_domain_owner
+    codeartefact_domain_name = var.codeartefact_domain_name
+    application_version = var.application_version
+    application_env = var.application_env
+    twilio_account_sid = var.twilio_account_sid
+    twilio_api_secret = var.twilio_api_secret
+    twilio_auth_token = var.twilio_auth_token
+    twilio_verify_sid = var.twilio_verify_sid
+    dynamodb_endpoint = var.dynamodb_endpoint
+    twilio_conversation_sid = var.twilio_conversation_sid
+  }
+}
+
 resource "aws_launch_template" "launch_template" {
   name                   = "Sekhmet-api-Dev-lt"
   image_id               = var.ami_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.launch-template-sg.id]
-  user_data              = var.user_data
+  user_data              = "${base64encode(data.template_file.userdata.rendered)}"
   instance_initiated_shutdown_behavior = "terminate"
+  key_name               = var.key_name
 
   tag_specifications {
     resource_type = "instance"
