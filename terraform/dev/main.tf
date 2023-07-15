@@ -1,6 +1,6 @@
 # Create Application Load Balancer
 module "alb" {
-  source          = "./modules/alb"
+  source          = "../modules/alb"
   vpc_id          = var.vpc_id
   alb_name        = var.alb_name
   target_port     = var.target_port
@@ -8,11 +8,12 @@ module "alb" {
   security_groups = var.alb_security_groups
   subnets         = var.subnets
   target_group_name = var.target_group_name
+  application_env = "Dev"
 }
 
 # Create Auto Scaling Group
 module "asg" {
-  source           = "./modules/asg"
+  source           = "../modules/asg"
   vpc_id           = var.vpc_id
   asg_name         = var.asg_name
   min_instances    = var.min_instances
@@ -32,6 +33,7 @@ module "asg" {
   subnets = var.subnets
   key_name = var.key_name
   application_version = var.application_version
+  application_env = "Dev"
   twilio_conversation_sid = var.twilio_conversation_sid
   twilio_account_sid = var.twilio_account_sid
   twilio_auth_token = var.twilio_auth_token
@@ -43,10 +45,11 @@ module "asg" {
 
 # Create DynamoDB table
 module "dynamodb" {
-  source               = "./modules/dynamodb"
+  source               = "../modules/dynamodb"
   dynamodb_capacity_mode        = var.dynamodb_capacity_mode
   dynamodb_read_capacity_units  = var.dynamodb_read_capacity_units
   dynamodb_write_capacity_units = var.dynamodb_write_capacity_units
+  application_env = "Dev"
 }
 
 # Route53 CNAME record

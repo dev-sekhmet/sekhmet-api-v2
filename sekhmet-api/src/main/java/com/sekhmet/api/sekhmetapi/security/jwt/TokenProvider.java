@@ -5,8 +5,7 @@ import com.sekhmet.api.sekhmetapi.service.UserService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
@@ -17,11 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class TokenProvider {
-
-    private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
-
-    private static final String AUTHORITIES_KEY = "auth";
 
     private final JwtParser jwtParser;
 

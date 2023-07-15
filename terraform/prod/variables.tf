@@ -69,6 +69,7 @@ variable "ami_id" {
 variable "user_data" {
   description = "User data script to be executed on the instances"
   type        = string
+  default = "../user-data/user-data.sh"
 }
 
 variable "table_name_prefix" {
@@ -80,6 +81,10 @@ variable "dynamodb_capacity_mode" {
   description = "DynamoDB capacity mode (PROVISIONED or PAY_PER_REQUEST)"
   type        = string
   default     = "PROVISIONED"
+}
+variable "instance_type" {
+  description = "Instance type for the instances"
+  type        = string
 }
 
 variable "dynamodb_read_capacity_units" {
@@ -124,4 +129,60 @@ variable "region" {
   description = "The region"
   type        = string
   default     = "eu-west-3"
+}
+variable "instance_profile" {
+  description = "The instance profile"
+  type        = string
+}
+variable "key_name" {
+  description = "The key name"
+  type        = string
+}
+variable "codeartefact_domain_owner" {
+  description = "The domain owner"
+  type        = string
+}
+variable "codeartefact_domain_name" {
+  description = "The domain name"
+  type        = string
+}
+
+
+# application variables
+variable "application_version" {
+  type    = string
+}
+
+variable "application_env" {
+  type    = string
+  default = "Prod"
+}
+
+variable "twilio_account_sid" {
+  type    = string
+}
+
+variable "twilio_api_secret" {
+  type    = string
+}
+
+variable "twilio_auth_token" {
+  type    = string
+}
+
+variable "twilio_verify_sid" {
+  type    = string
+}
+
+variable "twilio_conversation_sid" {
+  type    = string
+}
+
+variable "dynamodb_endpoint" {
+  type    = string
+  default = "dynamodb.eu-west-3.amazonaws.com"
+}
+
+variable "aws_region" {
+  type    = string
 }

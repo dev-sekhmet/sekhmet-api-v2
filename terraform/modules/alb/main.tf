@@ -1,8 +1,31 @@
+resource "aws_security_group" "alb_sg" {
+  name        = "Sekhmet-alb-${var.application_env}-security-group"
+  description = "Security group for ALB"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Sekhmet-alb-${var.application_env}-security-group"
+  }
+}
+
 resource "aws_lb" "alb" {
   name               = var.alb_name
   internal           = false
   load_balancer_type = "application"
-  security_groups    = var.security_groups
+  security_groups    = [aws_security_group.alb_sg.id]
   subnets            = var.subnets
 
   tags = {
@@ -36,12 +59,4 @@ resource "aws_lb_target_group" "target_group" {
     path                = "/actuator/health"  # Update with your health check endpoint
     matcher             = "200"
   }
-}
-
-output "target_group_arn" {
-  value = aws_lb_target_group.target_group.arn
-}
-
-output "alb_dns_name" {
-  value = aws_lb.alb.dns_name
 }

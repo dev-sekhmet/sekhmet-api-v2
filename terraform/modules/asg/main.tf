@@ -1,6 +1,6 @@
 
 resource "aws_security_group" "launch-template-sg" {
-  name        = "Sekhmet-api-Dev-lt-sg"
+  name        = "Sekhmet-api-${var.application_env}-lt-sg"
   description = "Security group for ALB"
 
   ingress {
@@ -49,7 +49,7 @@ data "template_file" "userdata" {
 }
 
 resource "aws_launch_template" "launch_template" {
-  name                   = "Sekhmet-api-Dev-lt"
+  name                   = "Sekhmet-api-${var.application_env}-lt"
   image_id               = var.ami_id
   instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.launch-template-sg.id]
@@ -60,7 +60,7 @@ resource "aws_launch_template" "launch_template" {
   tag_specifications {
     resource_type = "instance"
     tags = {
-      Name = "Sekhmet-api-Dev"
+      Name = "Sekhmet-api-${var.application_env}"
     }
   }
   iam_instance_profile {
@@ -76,7 +76,7 @@ resource "aws_launch_template" "launch_template" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_in_alarm" {
-  alarm_name          = "ScaleInAlarm"
+  alarm_name          = "Sekhmet-api-${var.application_env}-ScaleInAlarm"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
@@ -92,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_in_alarm" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "scale_out_alarm" {
-  alarm_name          = "ScaleOutAlarm"
+  alarm_name          = "Sekhmet-api-${var.application_env}-ScaleOutAlarm"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = 1
   metric_name         = "CPUUtilization"
@@ -108,7 +108,7 @@ resource "aws_cloudwatch_metric_alarm" "scale_out_alarm" {
 }
 
 resource "aws_autoscaling_policy" "scale_out_policy" {
-  name                   = "ScaleOut"
+  name                   = "Sekhmet-api-${var.application_env}-ScaleOutPolicy"
   autoscaling_group_name = aws_autoscaling_group.asg.name
   policy_type            = "SimpleScaling"
   cooldown               = 300
@@ -117,7 +117,7 @@ resource "aws_autoscaling_policy" "scale_out_policy" {
 }
 
 resource "aws_autoscaling_policy" "scale_in_policy" {
-  name                   = "ScaleIn"
+  name                   = "Sekhmet-api-${var.application_env}-ScaleInPolicy"
   autoscaling_group_name = aws_autoscaling_group.asg.name
   policy_type            = "SimpleScaling"
   cooldown               = 300

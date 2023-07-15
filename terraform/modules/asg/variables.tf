@@ -135,7 +135,6 @@ variable "application_version" {
 
 variable "application_env" {
   type    = string
-  default = "Dev"
 }
 
 variable "twilio_account_sid" {

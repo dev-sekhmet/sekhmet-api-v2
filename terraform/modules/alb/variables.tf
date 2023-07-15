@@ -40,3 +40,7 @@ variable "target_group_name" {
   description = "The name of the ALB target group"
   type        = string
 }
+
+variable "application_env" {
+  type    = string
+}

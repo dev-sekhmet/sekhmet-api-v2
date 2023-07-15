@@ -17,3 +17,7 @@ variable "dynamodb_capacity_mode" {
   type        = string
   default     = "PROVISIONED"
 }
+
+variable "application_env" {
+  type    = string
+}
