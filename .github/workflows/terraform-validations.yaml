@@ -1,9 +1,10 @@
-name: Terraform Automated Deployment
+name: Terraform Validations
 
 on:
   pull_request:
     branches:
       - main
+      - master
 
 jobs:
   format_check:
