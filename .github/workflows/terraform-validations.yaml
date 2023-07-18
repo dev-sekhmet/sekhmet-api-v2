@@ -30,7 +30,6 @@ jobs:
       - name: Generate tfvars
         run: |
           echo ${{ secrets.TF_DEV_VARIABLES }} > terraform.tfvars
-          cat terraform.tfvars
         working-directory: terraform/dev
 
       - name: Set up Terraform
