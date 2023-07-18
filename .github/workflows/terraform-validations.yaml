@@ -29,7 +29,11 @@ jobs:
 
       - name: Generate tfvars
         run: |
-          echo "${{ secrets.TF_DEV_VARIABLES }}" > terraform.tfvars
+          echo ${{ secrets.TF_DEV_VARIABLES }} | while read -r line; do
+            key=$(echo $line | cut -d= -f1)
+            value=$(echo $line | cut -d= -f2-)
+            echo "${key} = \"${value}\""
+          done > terraform/dev/terraform.tfvars
         working-directory: terraform/dev
 
       - name: Set up Terraform
@@ -50,6 +54,6 @@ jobs:
         run: terraform validate
         working-directory: terraform/dev
 
-      - name: Terraform Validate
+      - name: Terraform Plan
         run: terraform plan -var-file=terraform.tfvars
         working-directory: terraform/dev
