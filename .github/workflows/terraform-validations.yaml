@@ -29,9 +29,7 @@ jobs:
 
       - name: Generate tfvars
         run: |
-          for var in $(compgen -e); do
-            echo "${var} = \"$(printenv ${var})\"" >> terraform.tfvars
-          done
+          echo ${{ env.TF_DEV_VARIABLES }} > terraform.tfvars
           cat terraform.tfvars
         working-directory: terraform/dev
 
