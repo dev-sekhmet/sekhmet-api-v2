@@ -47,5 +47,9 @@ jobs:
         working-directory: terraform/dev
 
       - name: Terraform Validate
-        run: terraform validate -var-file=terraform.tfvars
+        run: terraform validate
+        working-directory: terraform/dev
+
+      - name: Terraform Validate
+        run: terraform plan -var-file=terraform.tfvars
         working-directory: terraform/dev
