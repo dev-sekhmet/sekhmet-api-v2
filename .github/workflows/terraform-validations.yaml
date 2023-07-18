@@ -33,7 +33,7 @@ jobs:
             key=$(echo $line | cut -d= -f1)
             value=$(echo $line | cut -d= -f2-)
             echo "${key} = \"${value}\""
-          done > terraform/dev/terraform.tfvars
+          done > terraform.tfvars
         working-directory: terraform/dev
 
       - name: Set up Terraform
