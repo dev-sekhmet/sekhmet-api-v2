@@ -29,7 +29,7 @@ jobs:
 
       - name: Generate tfvars
         run: |
-         echo "${{ secrets.TF_JSON_VARIABLES }}" | jq -r 'to_entries|map("\(.key) = \"\(.value|tostring)\"")|.[]' > terraform.tfvars
+         echo "${{ secrets.TF_DEV_VARIABLES }}" | jq -r 'to_entries|map("\(.key) = \"\(.value|tostring)\"")|.[]' > terraform.tfvars
         working-directory: terraform/dev
 
       - name: Set up Terraform
