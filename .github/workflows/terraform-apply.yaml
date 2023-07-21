@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Environment to deploy (Dev or Prod)'
+        description: 'Environment to destroy (dev or prod)'
         required: true
       app_version:
         description: 'Application version to deploy'
