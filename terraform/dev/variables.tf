@@ -69,7 +69,7 @@ variable "ami_id" {
 variable "user_data" {
   description = "User data script to be executed on the instances"
   type        = string
-  default = "../user-data/user-data.sh"
+  default     = "../user-data/user-data.sh"
 }
 
 variable "table_name_prefix" {
@@ -150,7 +150,7 @@ variable "codeartefact_domain_name" {
 
 # application variables
 variable "application_version" {
-  type    = string
+  type = string
 }
 
 variable "application_env" {
@@ -159,19 +159,19 @@ variable "application_env" {
 }
 
 variable "twilio_account_sid" {
-  type    = string
+  type = string
 }
 
 variable "twilio_api_secret" {
-  type    = string
+  type = string
 }
 
 variable "twilio_auth_token" {
-  type    = string
+  type = string
 }
 
 variable "twilio_verify_sid" {
-  type    = string
+  type = string
 }
 
 variable "dynamodb_endpoint" {
@@ -180,9 +180,9 @@ variable "dynamodb_endpoint" {
 }
 
 variable "aws_region" {
-  type    = string
+  type = string
 }
 
 variable "twilio_conversation_sid" {
-  type    = string
+  type = string
 }

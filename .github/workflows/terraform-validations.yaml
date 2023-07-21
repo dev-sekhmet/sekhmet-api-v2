@@ -1,82 +1,57 @@
-name: Terraform Automated Deployment
+name: Terraform Validations
 
 on:
   pull_request:
     branches:
       - main
+      - master
 
 jobs:
   format_check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
 
       - name: Check Terraform format
-        uses: hashicorp/terraform-github-actions@v0.5.4
-        with:
-          args: fmt -check
+        run: terraform fmt -check
+        working-directory: terraform/dev # or use terraform/prod if necessary
 
   validate:
     needs: format_check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3.5.2
 
-      - name: Generate tfvars
+      - name: Set env vars and run script
         run: |
-          for var in $(compgen -e); do
-            echo "${var} = \"$(printenv ${var})\"" >> terraform.tfvars
-          done
-        working-directory: terraform/dev
+          echo "${{ secrets.TF_DEV_SET_ENV_VARS_SCRIPT }}" > set_env.sh
+          chmod +x set_env.sh
+          . ./set_env.sh
+        shell: bash
 
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2.0.3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: eu-west-3
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Terraform Init
         run: terraform init
         working-directory: terraform/dev
 
       - name: Terraform Validate
-        run: terraform validate -var-file=terraform.tfvars
-        working-directory: terraform/dev
-
-  plan:
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Generate tfvars
-        run: |
-          for var in $(compgen -e); do
-            echo "${var} = \"$(printenv ${var})\"" >> terraform.tfvars
-          done
-          cat terraform.tfvars
-        working-directory: terraform/dev
-
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-
-      - name: Terraform Init
-        run: terraform init
+        run: terraform validate
         working-directory: terraform/dev
 
       - name: Terraform Plan
-        id: plan
-        run: terraform plan -var-file=terraform.tfvars -out=tfplan
+        run: terraform plan
         working-directory: terraform/dev
-
-  summary:
-    needs: plan
-    runs-on: ubuntu-latest
-    if: ${{ always() }}
-    steps:
-      - name: Check Summary
-        run: |
-          echo "Format Check: ${{ job.status }}" >> summary.txt
-          echo "Validation: ${{ needs.validate.result }}" >> summary.txt
-          echo "Plan: ${{ needs.plan.result }}" >> summary.txt
-          cat summary.txt

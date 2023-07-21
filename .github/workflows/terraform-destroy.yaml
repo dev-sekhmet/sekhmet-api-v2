@@ -1,13 +1,10 @@
-name: Terraform Apply
+name: Terraform Destroy
 
 on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Environment to deploy (Dev or Prod)'
-        required: true
-      app_version:
-        description: 'Application version to deploy'
+        description: 'Environment to destroy (Dev or Prod)'
         required: true
 
 jobs:
@@ -26,7 +23,7 @@ jobs:
           echo "${{ secrets['TF_' + env + '_SET_ENV_VARS_SCRIPT'] }}" > set_env.sh
           chmod +x set_env.sh
           . ./set_env.sh
-          echo "TF_VAR_application_version=${{ github.event.inputs.app_version }}" >> $GITHUB_ENV
+          echo "TF_VAR_application_version=nothing" >> $GITHUB_ENV
         env:
           env: ${{ github.event.inputs.env }}
         shell: bash
@@ -42,10 +39,7 @@ jobs:
         run: terraform init
         working-directory: terraform/${{ github.event.inputs.env }}
 
-      - name: Terraform Plan
-        run: terraform plan
-        working-directory: terraform/${{ github.event.inputs.env }}
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve
         working-directory: terraform/${{ github.event.inputs.env }}
