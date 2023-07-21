@@ -22,13 +22,14 @@ jobs:
 
       - name: Set env vars and run script
         run: |
-          env_upper=$(echo $env | tr '[:lower:]' '[:upper:]')
-          echo "${{ secrets['TF_' + env + '_SET_ENV_VARS_SCRIPT'] }}" > set_env.sh
+          if [[ "${{ github.event.inputs.env }}" == "dev" ]]; then
+            echo "${{ secrets['TF_DEV_SET_ENV_VARS_SCRIPT'] }}" > set_env.sh
+          else
+            echo "${{ secrets['TF_PROD_SET_ENV_VARS_SCRIPT'] }}" > set_env.sh
+          fi
           chmod +x set_env.sh
           . ./set_env.sh
           echo "TF_VAR_application_version=${{ github.event.inputs.app_version }}" >> $GITHUB_ENV
-        env:
-          env: ${{ github.event.inputs.env }}
         shell: bash
 
       - name: Configure AWS Credentials
