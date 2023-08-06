@@ -40,6 +40,7 @@ data "template_file" "userdata" {
     application_env = var.application_env
     twilio_account_sid = var.twilio_account_sid
     twilio_api_secret = var.twilio_api_secret
+    twilio_api_sid = var.twilio_api_sid
     twilio_auth_token = var.twilio_auth_token
     twilio_verify_sid = var.twilio_verify_sid
     dynamodb_endpoint = var.dynamodb_endpoint

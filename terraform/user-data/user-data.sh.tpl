@@ -39,6 +39,7 @@ cat <<EOF > /home/ec2-user/spring-boot-home/env.conf
 APPLICATION_ENV=${application_env}
 APPLICATION_TWILIO_ACCOUNT_SID=${twilio_account_sid}
 APPLICATION_TWILIO_API_SECRET=${twilio_api_secret}
+APPLICATION_TWILIO_API_SID=${twilio_api_sid}
 APPLICATION_TWILIO_AUTH_TOKEN=${twilio_auth_token}
 APPLICATION_TWILIO_VERIFY_SID=${twilio_verify_sid}
 AMAZON_DYNAMODB_ENDPOINT=${dynamodb_endpoint}

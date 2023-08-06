@@ -166,6 +166,10 @@ variable "twilio_api_secret" {
   type = string
 }
 
+variable "twilio_api_sid" {
+  type = string
+}
+
 variable "twilio_auth_token" {
   type = string
 }

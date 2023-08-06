@@ -27,20 +27,21 @@ module "asg" {
   codeartefact_domain_name = var.codeartefact_domain_name
   codeartefact_domain_owner = var.codeartefact_domain_owner
   instance_profile = var.instance_profile
-  instance_type = var.instance_type
-  route53_cname_name = var.route53_cname_name
-  route53_zone_id = var.route53_zone_id
-  subnets = var.subnets
-  key_name = var.key_name
-  application_version = var.application_version
-  application_env = "Prod"
+  instance_type           = var.instance_type
+  route53_cname_name      = var.route53_cname_name
+  route53_zone_id         = var.route53_zone_id
+  subnets                 = var.subnets
+  key_name                = var.key_name
+  application_version     = var.application_version
+  application_env         = "Prod"
   twilio_conversation_sid = var.twilio_conversation_sid
-  twilio_account_sid = var.twilio_account_sid
-  twilio_auth_token = var.twilio_auth_token
-  twilio_api_secret = var.twilio_api_secret
-  twilio_verify_sid = var.twilio_verify_sid
-  dynamodb_endpoint = var.dynamodb_endpoint
-  aws_region = var.aws_region
+  twilio_account_sid      = var.twilio_account_sid
+  twilio_auth_token       = var.twilio_auth_token
+  twilio_api_secret       = var.twilio_api_secret
+  twilio_api_sid          = var.twilio_api_sid
+  twilio_verify_sid       = var.twilio_verify_sid
+  dynamodb_endpoint       = var.dynamodb_endpoint
+  aws_region              = var.aws_region
 }
 
 # Create DynamoDB table
